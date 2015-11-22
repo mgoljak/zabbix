@@ -1,0 +1,3 @@
+# Zabbix Low Level Discovery for blockdevices and mdraids
+UserParameter=blockdev.discovery,<%= @dir_zabbix_agent_libdir %>/lld-blockdev -s -x -d -m --skip-mpath
+UserParameter=mdraid.discovery,<%= @dir_zabbix_agent_libdir %>/lld-blockdev -m

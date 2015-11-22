@@ -1,0 +1,2 @@
+# sshd
+UserParameter=sshd.openconnections,/usr/bin/sudo <%= @lsof_bin %> -i -n -l -P | /bin/egrep -c 'sshd.*ESTABLISHED'

@@ -1,0 +1,4 @@
+# rabbitmq
+UserParameter=rabbitmq.discovery_queue,<%= @dir_zabbix_agent_libdir %>/list_rabbit_queues.sh
+UserParameter=rabbitmq.discovery_nodes,<%= @dir_zabbix_agent_libdir %>/list_rabbit_nodes.sh
+UserParameter=rabbitmq[*],<%= @dir_zabbix_agent_libdir %>/rabbitmq-status.sh $1 $2 $3

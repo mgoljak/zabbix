@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#
+# Script checks for mdraid health, and reports state of array.
+#
+
+# severity, depended on RAID state
+OK=0
+WARN=1
+ERROR=2
+
+# if no md name is given, exit wtih WARN + 1
+[ -z $1 ] && echo $OK && exit 1
+
+# if there is no such block device, exit with WARN + 1
+[ ! -b /dev/$1 ] && echo $OK && exit 1
+
+sudo /sbin/mdadm --detail /dev/$1 | grep '  State' | egrep -q ' (active|clean)'
+RAIDOK=$?
+sudo /sbin/mdadm --detail /dev/$1 | grep '  State' | egrep -q '(resyncing|recovering|degraded)'
+RAIDWARN=$?
+
+if [ $RAIDOK -eq 0 ]; then
+  [ $RAIDWARN -eq 0 ] && echo $WARN || echo $OK
+else
+  echo $ERROR
+fi
+
+exit 0
