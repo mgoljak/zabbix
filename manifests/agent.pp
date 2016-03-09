@@ -16,6 +16,7 @@ class zabbix::agent (
   $dir_zabbix_agentd_confd = $::zabbix::params::dir_zabbix_agentd_confd,
   $dir_zabbix_agent_libdir = $::zabbix::params::dir_zabbix_agent_libdir,
   $zabbix_agentd_logfile   = $::zabbix::params::zabbix_agentd_logfile,
+  $zabbix_agent_pidfile    = $::zabbix::params::zabbix_agent_pidfile,
   $server_name             = 'mon',
   $server_active           = 'mon',
   $client_name             = $::fqdn,
