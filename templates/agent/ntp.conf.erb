@@ -2,4 +2,4 @@
 UserParameter=ntp.offset,<%= @ntpq_bin %> -pn | /usr/bin/gawk 'BEGIN { offset=1000 } $1 ~ /\*/ { offset=$9a } END { print offset }'
 UserParameter=ntp.jitter,<%= @ntpq_bin %> -pn | /usr/bin/gawk 'BEGIN { offset=1000 } $1 ~ /\*/ { offset=$10 } END { print offset }'
 UserParameter=ntp.delay,<%= @ntpq_bin %> -pn  | /usr/bin/gawk 'BEGIN { offset=1000 } $1 ~ /\*/ { offset=$8  } END { print offset }'
-UserParameter=ntp.servers,<%= @ntpq_bin %> -c associations |gawk '/^\  [0-9]+/ { print $5" "$6}'| grep -c yes
+UserParameter=ntp.servers,<%= @ntpq_bin %> -c associations | /usr/bin/gawk '/^\  [0-9]+/ { print $5" "$6}'| /bin/grep -c yes

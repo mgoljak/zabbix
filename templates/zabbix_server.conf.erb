@@ -158,7 +158,8 @@ DBSocket=<%= @dbsocket_path %>
 ### Option: StartTrappers
 #	Number of pre-forked instances of trappers.
 #	Trappers accept incoming connections from Zabbix sender, active agents, active proxies and child nodes.
-#	At least one trapper process must be running to display server availability in the frontend.
+#	At least one trapper process must be running to display server availability and view queue
+#	in the frontend.
 #
 # Mandatory: no
 # Range: 0-1000
@@ -239,6 +240,14 @@ DBSocket=<%= @dbsocket_path %>
 # Default:
 # VMwareFrequency=60
 
+### Option: VMwarePerfFrequency
+#	How often Zabbix will connect to VMware service to obtain performance data.
+#
+# Mandatory: no
+# Range: 10-86400
+# Default:
+# VMwarePerfFrequency=60
+
 ### Option: VMwareCacheSize
 #	Size of VMware cache, in bytes.
 #	Shared memory size for storing VMware data.
@@ -248,6 +257,23 @@ DBSocket=<%= @dbsocket_path %>
 # Range: 256K-2G
 # Default:
 # VMwareCacheSize=8M
+
+### Option: VMwareTimeout
+#	Specifies how many seconds vmware collector waits for response from VMware service.
+#
+# Mandatory: no
+# Range: 1-300
+# Default:
+# VMwareTimeout=10
+
+### Option: EnableSNMPBulkRequests
+#	Enable or disable SNMP bulk requests.
+#	0 - disable
+#	1 - enable
+#
+# Mandatory: no
+# Default:
+# EnableSNMPBulkRequests=1
 
 ### Option: SNMPTrapperFile
 #	Temporary file used for passing data from SNMP trap daemon to the server.
@@ -276,7 +302,9 @@ ListenIP=<%= @listenip %>
 
 ### Option: HousekeepingFrequency
 #	How often Zabbix will perform housekeeping procedure (in hours).
-#	Housekeeping is removing unnecessary information from history, alert, and alarms tables.
+#	Housekeeping is removing outdated information from the database.
+#	To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
+#	hours of outdated information are deleted in one housekeeping cycle, for each item.
 #
 # Mandatory: no
 # Range: 1-24
@@ -309,7 +337,7 @@ ListenIP=<%= @listenip %>
 #	Shared memory size for storing host, item and trigger data.
 #
 # Mandatory: no
-# Range: 128K-2G
+# Range: 128K-8G
 # Default:
 # CacheSize=8M
 

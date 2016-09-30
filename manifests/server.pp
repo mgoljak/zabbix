@@ -102,7 +102,7 @@ class zabbix::server (
   # autoload configs from zabbix::server::configs from hiera
   if ( $autoload_configs == true ) {
     $zabbix_config_rules = hiera_hash('zabbix::server::configs', {})
-    create_resources(::Zabbix::Server::Config, $zabbix_config_rules)
+    create_resources(::zabbix::server::config, $zabbix_config_rules)
   }
 
 }

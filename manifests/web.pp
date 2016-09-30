@@ -32,11 +32,6 @@ class zabbix::web (
     include ::apache
     include ::apache::mod::php
     include ::apache::mod::rewrite
-
-    file { "${::apache::confd_dir}/zabbix.conf":
-      content => template('zabbix/zabbix.conf.erb'),
-      require => Package['zabbix-web'],
-    }
   }
 
   # depends on jsosic/php module
@@ -44,12 +39,12 @@ class zabbix::web (
 
   File {
     ensure  => file,
-    require => Package[$package],
+    require => Package['zabbix-web'],
   }
 
   package { 'zabbix-web':
     ensure => $version,
-    name   => $package,
+    name   => "${package}-${db}",
   }
 
   file { "${dir_zabbix_php}/zabbix.conf.php":
@@ -57,6 +52,11 @@ class zabbix::web (
     group   => $file_group,
     mode    => $file_mode,
     content => template('zabbix/zabbix.conf.php.erb'),
+  }
+
+  file { "${::apache::confd_dir}/zabbix.conf":
+    content => template('zabbix/zabbix.conf.erb'),
+    require => Package['zabbix-web'],
   }
 
   if $manage_maintenance {

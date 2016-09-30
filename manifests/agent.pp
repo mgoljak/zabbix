@@ -39,10 +39,10 @@ class zabbix::agent (
   }
 
   service { 'zabbix-agent':
-    ensure   => running,
-    name     => $service,
-    enable   => true,
-    require  => Package['zabbix-agent'],
+    ensure  => running,
+    name    => $service,
+    enable  => true,
+    require => Package['zabbix-agent'],
   }
 
   file { 'zabbix_agentd.conf':
@@ -81,7 +81,7 @@ class zabbix::agent (
   # autoload configs from zabbix::agent::configs from hiera
   if ( $autoload_configs == true ) {
     $zabbix_agent_config_rules = hiera_hash('zabbix::agent::configs', {})
-    create_resources(::Zabbix::Agent::Config, $zabbix_agent_config_rules)
+    create_resources(::zabbix::agent::config, $zabbix_agent_config_rules)
   }
 
 }

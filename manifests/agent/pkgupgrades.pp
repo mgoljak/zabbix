@@ -17,9 +17,11 @@ class zabbix::agent::pkgupgrades (
         content => template('zabbix/agent/pkgupgrades-rhel.conf.erb'),
         notify  => Service['zabbix-agent'],
       }
-     }
+    }
     /(Debian|debian|Ubuntu|ubuntu)/: {
-      package { 'update-notifier-common':   ensure  => present, } 
+      package { 'update-notifier-common':
+        ensure  => present,
+      }
       file { "${dir_zabbix_agentd_confd}/pkgupgrades.conf" :
         ensure  => file,
         owner   => root,
@@ -29,5 +31,4 @@ class zabbix::agent::pkgupgrades (
       }
     }
   }
- }
-
+}

@@ -97,8 +97,8 @@ class zabbix::params {
         $zabbix_server_pidfile    = '/run/zabbixsrv/zabbix_server.pid'
         $zabbix_agent_pidfile     = '/run/zabbix/zabbix_agentd.pid'
       } else {
-        $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agentd.pid'
         $zabbix_server_pidfile    = '/var/run/zabbixsrv/zabbix_server.pid'
+        $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agentd.pid'
       }
       $fpinglocation            = '/usr/sbin/fping'
       $fping6location           = '/usr/sbin/fping6'

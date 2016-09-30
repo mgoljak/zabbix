@@ -20,8 +20,16 @@ RAIDOK=$?
 sudo /sbin/mdadm --detail /dev/$1 | grep '  State' | egrep -q '(resyncing|recovering|degraded)'
 RAIDWARN=$?
 
+# if state is not active/clean, we're in trouble
 if [ $RAIDOK -eq 0 ]; then
-  [ $RAIDWARN -eq 0 ] && echo $WARN || echo $OK
+  # check if we're resilvering/recovering/degraded
+  if [ $RAIDWARN -eq 0 ]; then
+    # if we're resyncing, we can be in check state, which is weekly schedule
+    SYNC_ACTION="$(cat /sys/block/$1/md/sync_action)"
+    [ $SYNC_ACTION == "check" ] && echo $OK || echo $WARN
+  else
+    echo $OK
+  fi
 else
   echo $ERROR
 fi
