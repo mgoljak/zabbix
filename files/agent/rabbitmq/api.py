@@ -1,7 +1,6 @@
 #!/usr/bin/env /usr/bin/python
 '''Python module to query the RabbitMQ Management Plugin REST API and get
 results that can then be used by Zabbix.
-
 https://github.com/jasonmcintosh/rabbitmq-zabbix
 '''
 import json
@@ -19,17 +18,18 @@ class RabbitMQAPI(object):
     '''Class for RabbitMQ Management API'''
 
     def __init__(self, user_name='guest', password='guest', host_name='',
-                 port=15672, conf='etc/zabbix/zabbix_agentd.conf', senderhostname=None):
+                 protocol='http', port=15672, conf='/etc/zabbix/zabbix_agentd.conf', senderhostname=None):
         self.user_name = user_name
         self.password = password
         self.host_name = host_name or socket.gethostname()
+        self.protocol = protocol
         self.port = port
         self.conf = conf or '/etc/zabbix/zabbix_agentd.conf'
-        self.senderhostname = senderhostname
+        self.senderhostname = senderhostname if senderhostname else host_name
 
     def call_api(self, path):
         '''Call the REST API and convert the results into JSON.'''
-        url = 'http://{0}:{1}/api/{2}'.format(self.host_name, self.port, path)
+        url = '{0}://{1}:{2}/api/{3}'.format(self.protocol, self.host_name, self.port, path)
         password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
         password_mgr.add_password(None, url, self.user_name, self.password)
         handler = urllib2.HTTPBasicAuthHandler(password_mgr)
@@ -53,7 +53,7 @@ class RabbitMQAPI(object):
                     element = {'{#VHOSTNAME}': queue['vhost'],
                                '{#QUEUENAME}': queue['name']}
                     queues.append(element)
-                    logging.debug('Discovered queue '+queue['vhost']+' -> '+queue['name'])
+                    logging.debug('Discovered queue '+queue['vhost']+'/'+queue['name'])
                     break
         return queues
 
@@ -62,12 +62,12 @@ class RabbitMQAPI(object):
         nodes = []
         for node in self.call_api('nodes'):
             # We need to return the node name, because Zabbix
-            # does not support @ as an item paramater
+            # does not support @ as an item parameter
             name = node['name'].split('@')[1]
             element = {'{#NODENAME}': name,
                        '{#NODETYPE}': node['type']}
             nodes.append(element)
-            logging.debug('Discovered nodes '+name+' -> '+node['type'])
+            logging.debug('Discovered nodes '+name+'/'+node['type'])
         return nodes
 
     def check_queue(self, filters=None):
@@ -99,14 +99,14 @@ class RabbitMQAPI(object):
         '''Prepare the queue data for sending'''
         for item in ['memory', 'messages', 'messages_unacknowledged',
                      'consumers']:
-            key = '"rabbitmq[{0},queue_{1},{2}]"'
+            key = '"rabbitmq.queues[{0},queue_{1},{2}]"'
             key = key.format(queue['vhost'], item, queue['name'])
             value = queue.get(item, 0)
             logging.debug("SENDER_DATA: - %s %s" % (key,value))
             tmpfile.write("- %s %s\n" % (key, value))
         ##  This is a non standard bit of information added after the standard items
         for item in ['deliver_get', 'publish']:
-            key = '"rabbitmq[{0},queue_message_stats_{1},{2}]"'
+            key = '"rabbitmq.queues[{0},queue_message_stats_{1},{2}]"'
             key = key.format(queue['vhost'], item, queue['name'])
             value = queue.get('message_stats', {}).get(item, 0)
             logging.debug("SENDER_DATA: - %s %s" % (key,value))
@@ -164,6 +164,8 @@ def main():
                       default='guest')
     parser.add_option('--hostname', help='RabbitMQ API host',
                       default=socket.gethostname())
+    parser.add_option('--protocol', help='RabbitMQ API protocol (http or https)',
+                      default='http')
     parser.add_option('--port', help='RabbitMQ API port', type='int',
                       default=15672)
     parser.add_option('--check', type='choice', choices=choices,
@@ -178,7 +180,7 @@ def main():
         parser.error('At least one check should be specified')
     logging.debug("Started trying to process data")
     api = RabbitMQAPI(user_name=options.username, password=options.password,
-                      host_name=options.hostname, port=options.port,
+                      host_name=options.hostname, protocol=options.protocol, port=options.port,
                       conf=options.conf, senderhostname=options.senderhostname)
     if options.filters:
         try:

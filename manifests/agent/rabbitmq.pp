@@ -8,9 +8,11 @@ class zabbix::agent::rabbitmq (
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
   $username                = 'use_hiera',
   $password                = 'use_hiera',
+  $rabbitmq_protocol       = 'http',
   $rabbitmq_hostname       = 'localhost',
   $rabbitmq_port           = '15672',
   $node                    = $::fqdn,
+  $senderhostname          = $::fqdn,
 ) inherits zabbix::agent {
 
   file { "${dir_zabbix_agentd_confd}/rabbitmq.conf" :
