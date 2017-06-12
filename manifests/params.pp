@@ -41,6 +41,10 @@ class zabbix::params {
   # install package depending on major version
   case $::osfamily {
     default: {
+      $get_package              = 'zabbix-get'
+      $get_version              = 'present'
+      $sender_package           = 'zabbix-sender'
+      $sender_version           = 'present'
       $agent_package            = 'zabbix-agent'
       $agent_version            = 'present'
       $agent_service            = 'zabbix-agent'
@@ -83,6 +87,10 @@ class zabbix::params {
       $web_dir_zabbix_php       = '/etc/zabbix/web'
     }
     /(RedHat|redhat|amazon)/: {
+      $get_package              = 'zabbix-get'
+      $get_version              = 'present'
+      $sender_package           = 'zabbix-sender'
+      $sender_version           = 'present'
       $agent_package            = 'zabbix-agent'
       $agent_version            = 'present'
       $agent_service            = 'zabbix-agent'
@@ -130,6 +138,10 @@ class zabbix::params {
       $web_dir_zabbix_php       = '/etc/zabbix/web'
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
+      $get_package              = 'zabbix-get'
+      $get_version              = 'present'
+      $sender_package           = 'zabbix-sender'
+      $sender_version           = 'present'
       $agent_package            = 'zabbix-agent'
       $agent_version            = 'present'
       $agent_service            = 'zabbix-agent'
@@ -143,8 +155,8 @@ class zabbix::params {
       $server_service           = 'zabbix-server'
       $server_status            = 'enabled'
       $zabbix_server_logfile    = '/var/log/zabbix/zabbix_server.log'
-      $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agentd.pid'
       $zabbix_server_pidfile    = '/var/run/zabbix/zabbix_server.pid'
+      $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agentd.pid'
       $fpinglocation            = '/usr/bin/fping'
       $fping6location           = '/usr/bin/fping6'
       $alert_scripts_path       = '/usr/lib/zabbix/alertscripts'
