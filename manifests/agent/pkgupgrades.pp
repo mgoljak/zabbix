@@ -19,9 +19,6 @@ class zabbix::agent::pkgupgrades (
       }
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
-      package { 'update-notifier-common':
-        ensure  => present,
-      }
       file { "${dir_zabbix_agentd_confd}/pkgupgrades.conf" :
         ensure  => file,
         owner   => root,
