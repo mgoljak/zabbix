@@ -19,8 +19,8 @@ class zabbix::params {
 
   # module specific settings (proxy)
   $proxy_file_owner     = 'root'
-  $proxy_file_group     = 'root'
-  $proxy_file_mode      = '0644'
+  $proxy_file_group     = 'zabbix'
+  $proxy_file_mode      = '0640'
   $proxy_purge_conf_dir = false
 
   # module specific settings (server)
@@ -67,6 +67,9 @@ class zabbix::params {
       $proxy_version            = 'present'
       $proxy_service            = 'zabbix-proxy'
       $proxy_status             = 'enabled'
+      $proxy_logfile            = '/var/log/zabbix/zabbix_proxy.log'
+      $proxy_pidfile            = '/var/run/zabbix/zabbix_proxy.pid'
+      $file_zabbix_proxy_conf   = '/etc/zabbix/zabbix_proxy.conf'
       $java_gateway_package     = 'zabbix-java-gateway'
       $java_gateway_version     = 'present'
       $java_gateway_service     = 'zabbix-java-gateway'
@@ -111,6 +114,9 @@ class zabbix::params {
       $proxy_version            = 'present'
       $proxy_service            = 'zabbix-proxy'
       $proxy_status             = 'enabled'
+      $proxy_logfile            = '/var/log/zabbix/zabbix_proxy.log'
+      $proxy_pidfile            = '/var/run/zabbix/zabbix_proxy.pid'
+      $file_zabbix_proxy_conf   = '/etc/zabbix/zabbix_proxy.conf'
       $java_gateway_package     = 'zabbix-java-gateway'
       $java_gateway_version     = 'present'
       $java_gateway_service     = 'zabbix-java-gateway'
@@ -150,6 +156,9 @@ class zabbix::params {
       $proxy_version            = 'present'
       $proxy_service            = 'zabbix-proxy'
       $proxy_status             = 'enabled'
+      $proxy_logfile            = '/var/log/zabbix/zabbix_proxy.log'
+      $proxy_pidfile            = '/var/run/zabbix/zabbix_proxy.pid'
+      $file_zabbix_proxy_conf   = '/etc/zabbix/zabbix_proxy.conf'
       $java_gateway_package     = 'zabbix-java-gateway'
       $java_gateway_version     = 'present'
       $java_gateway_service     = 'zabbix-java-gateway'
