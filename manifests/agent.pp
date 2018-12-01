@@ -24,6 +24,11 @@ class zabbix::agent (
   $buffersize              = 100,
   $client_name             = $::fqdn,
   $timeout                 = '30',
+  $tls_connect             = 'unencrypted',
+  $tls_accept              = 'unencrypted',
+  $tls_ca_file             = undef,
+  $tls_cert_file           = undef,
+  $tls_key_file            = undef,
   $autoload_configs        = false,
 ) inherits zabbix::params {
 

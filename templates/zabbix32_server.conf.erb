@@ -628,6 +628,9 @@ Include=<%= @dir_zabbix_server_confd %>/
 # Mandatory: no
 # Default:
 # TLSCAFile=
+<% if @tls_ca_file -%>
+TLSCAFile=<%= @tls_ca_file %>
+<% end -%>
 
 ### Option: TLSCRLFile
 #	Full pathname of a file containing revoked certificates.
@@ -642,6 +645,9 @@ Include=<%= @dir_zabbix_server_confd %>/
 # Mandatory: no
 # Default:
 # TLSCertFile=
+<% if @tls_cert_file -%>
+TLSCertFile=<%= @tls_cert_file %>
+<% end -%>
 
 ### Option: TLSKeyFile
 #	Full pathname of a file containing the server private key.
@@ -649,3 +655,6 @@ Include=<%= @dir_zabbix_server_confd %>/
 # Mandatory: no
 # Default:
 # TLSKeyFile=
+<% if @tls_key_file -%>
+TLSKeyFile=<%= @tls_key_file %>
+<% end -%>

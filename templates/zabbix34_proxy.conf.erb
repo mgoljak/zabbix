@@ -648,6 +648,9 @@ LogSlowQueries=3000
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSConnect=unencrypted
+<% if @tls_connect != 'unencrypted' -%>
+TLSConnect=<%= @tls_connect %>
+<% end -%>
 
 ### Option: TLSAccept
 #	What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
@@ -659,6 +662,9 @@ LogSlowQueries=3000
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSAccept=unencrypted
+<% if @tls_accept != 'unencrypted' -%>
+TLSAccept=<%= @tls_accept %>
+<% end -%>
 
 ### Option: TLSCAFile
 #	Full pathname of a file containing the top-level CA(s) certificates for
@@ -667,6 +673,9 @@ LogSlowQueries=3000
 # Mandatory: no
 # Default:
 # TLSCAFile=
+<% if @tls_connect != 'unencrypted' or @tls_accept != 'unencrypted' -%>
+TLSCAFile=<%= @tls_ca_file %>
+<% end -%>
 
 ### Option: TLSCRLFile
 #	Full pathname of a file containing revoked certificates.
@@ -695,6 +704,9 @@ LogSlowQueries=3000
 # Mandatory: no
 # Default:
 # TLSCertFile=
+<% if @tls_connect != 'unencrypted' or @tls_accept != 'unencrypted' -%>
+TLSCertFile=<%= @tls_cert_file %>
+<% end -%>
 
 ### Option: TLSKeyFile
 #	Full pathname of a file containing the proxy private key.
@@ -702,6 +714,9 @@ LogSlowQueries=3000
 # Mandatory: no
 # Default:
 # TLSKeyFile=
+<% if @tls_connect != 'unencrypted' or @tls_accept != 'unencrypted' -%>
+TLSKeyFile=<%= @tls_key_file %>
+<% end -%>
 
 ### Option: TLSPSKIdentity
 #	Unique, case sensitive string used to identify the pre-shared key.

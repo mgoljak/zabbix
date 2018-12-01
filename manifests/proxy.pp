@@ -11,10 +11,8 @@ class zabbix::proxy (
   $file_owner              = $::zabbix::params::proxy_file_owner,
   $file_group              = $::zabbix::params::proxy_file_group,
   $file_mode               = $::zabbix::params::proxy_file_mode,
-#  $purge_conf_dir          = $::zabbix::params::server_purge_conf_dir,
   $file_zabbix_proxy_conf  = $::zabbix::params::file_zabbix_proxy_conf,
   $erb_zabbix_proxy_conf   = 'zabbix/zabbix_proxy.conf.erb',
-#  $dir_zabbix_server_confd = $::zabbix::params::dir_zabbix_server_confd,
   $proxymode               = '0',
   $pidfile                 = $::zabbix::params::proxy_pidfile,
   $logfile                 = $::zabbix::params::proxy_logfile,
@@ -29,8 +27,11 @@ class zabbix::proxy (
   $dbsocket_path           = '/var/lib/mysql/mysql.sock',
   $server                  = '127.0.0.1',
   $client_name             = $::fqdn,
-#  $tmpdir                  = $::zabbix::params::tmpdir,
-#  $autoload_configs        = false,
+  $tls_connect             = 'unencrypted',
+  $tls_accept              = 'unencrypted',
+  $tls_ca_file             = undef,
+  $tls_cert_file           = undef,
+  $tls_key_file            = undef,
 ) inherits zabbix::params {
 
   File {
