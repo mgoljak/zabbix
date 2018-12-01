@@ -104,7 +104,7 @@ class zabbix::params {
       $server_service           = 'zabbix-server'
       $server_status            = 'enabled'
       $zabbix_server_logfile    = '/var/log/zabbixsrv/zabbix_server.log'
-      if $facts['os']['release']['major'] == '7' {
+      if $::facts['os']['release']['major'] == '7' {
         $zabbix_server_pidfile    = '/run/zabbixsrv/zabbix_server.pid'
         $zabbix_agent_pidfile     = '/run/zabbix/zabbix_agentd.pid'
       } else {

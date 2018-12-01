@@ -22,10 +22,11 @@ class zabbix::agent::elasticsearch (
   }
 
   file { "${dir_zabbix_agent_libdir}/elasticsearch.rb" :
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    source  => 'puppet:///modules/zabbix/agent/elasticsearch/elasticsearch.rb',
+    ensure => file,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
+    source => 'puppet:///modules/zabbix/agent/elasticsearch/elasticsearch.rb',
   }
+
 }

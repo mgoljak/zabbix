@@ -9,8 +9,8 @@ class zabbix::agent::mysql (
 ) inherits zabbix::agent {
 
   package { 'zabbix-agent_mysql':
-    ensure   => present,
-    require  => Package['zabbix-agent'],
+    ensure  => present,
+    require => Package['zabbix-agent'],
   }
 
   file { "${dir_zabbix_agentd_confd}/mysql.conf" :

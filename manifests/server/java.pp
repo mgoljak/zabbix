@@ -29,10 +29,10 @@ class zabbix::server::java (
   }
 
   service { 'zabbix-java-gateway':
-    ensure   => running,
-    name     => $service,
-    enable   => true,
-    require  => Package['zabbix-java-gateway'],
+    ensure  => running,
+    name    => $service,
+    enable  => true,
+    require => Package['zabbix-java-gateway'],
   }
 
   file { 'zabbix_java_gateway.conf':

@@ -48,10 +48,10 @@ class zabbix::server (
   }
 
   service { 'zabbix-server':
-    ensure   => running,
-    name     => $service,
-    enable   => true,
-    require  => Package['zabbix-server'],
+    ensure  => running,
+    name    => $service,
+    enable  => true,
+    require => Package['zabbix-server'],
   }
 
   file { 'zabbix_server.conf':

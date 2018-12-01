@@ -48,10 +48,10 @@ class zabbix::proxy (
   }
 
   service { 'zabbix-proxy':
-    ensure   => running,
-    name     => $service,
-    enable   => true,
-    require  => Package['zabbix-proxy'],
+    ensure  => running,
+    name    => $service,
+    enable  => true,
+    require => Package['zabbix-proxy'],
   }
 
   file { 'zabbix_proxy.conf':

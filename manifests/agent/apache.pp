@@ -6,6 +6,7 @@
 class zabbix::agent::apache (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
 ) inherits zabbix::agent {
+
   case $::osfamily {
     default: {
       $plugin_package = 'zabbix-agent_httpd'
@@ -17,10 +18,11 @@ class zabbix::agent::apache (
       $plugin_package = 'libapache-zabbix-agent'
     }
   }
+
   package { 'zabbix-agent_httpd':
-    ensure   => present,
-    name     => $plugin_package,
-    require  => Package['zabbix-agent'],
+    ensure  => present,
+    name    => $plugin_package,
+    require => Package['zabbix-agent'],
   }
 
   file { "${::apache::confd_dir}/server-status.conf": ensure => file, }
