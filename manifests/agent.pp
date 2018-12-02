@@ -20,6 +20,8 @@ class zabbix::agent (
   $zabbix_agent_pidfile    = $::zabbix::params::zabbix_agent_pidfile,
   $server_name             = 'mon',
   $server_active           = 'mon',
+  $buffersend              = 5,
+  $buffersize              = 100,
   $client_name             = $::fqdn,
   $timeout                 = '30',
   $autoload_configs        = false,
