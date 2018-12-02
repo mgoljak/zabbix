@@ -13,6 +13,7 @@ class zabbix::server (
   $file_mode               = $::zabbix::params::server_file_mode,
   $purge_conf_dir          = $::zabbix::params::server_purge_conf_dir,
   $file_zabbix_server_conf = $::zabbix::params::file_zabbix_server_conf,
+  $erb_zabbix_server_conf  = 'zabbix/zabbix_server.conf.erb',
   $dir_zabbix_server_confd = $::zabbix::params::dir_zabbix_server_confd,
   $pidfile                 = $::zabbix::params::zabbix_server_pidfile,
   $logfile                 = $::zabbix::params::zabbix_server_logfile,
@@ -57,7 +58,7 @@ class zabbix::server (
   file { 'zabbix_server.conf':
     path    => $file_zabbix_server_conf,
     mode    => '0640',
-    content => template('zabbix/zabbix_server.conf.erb'),
+    content => template($erb_zabbix_server_conf),
   }
 
   file { '/etc/zabbix/zabbix_server.d':
