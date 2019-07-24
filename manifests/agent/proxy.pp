@@ -10,7 +10,7 @@ class zabbix::agent::proxy (
 ) inherits zabbix::agent {
 
   ::sudoers::allowed_command { 'zabbix_proxy':
-    command          => '/usr/bin/php /var/www/merlin/2014-2015/local/ceu/test_proxy.php',
+    command          => '/usr/bin/php /var/www/merlin/2017-2018/local/ceu/test_proxy.php',
     user             => 'zabbix',
     require_password => false,
     comment          => 'Zabbix sensor for monitoring proxy.',

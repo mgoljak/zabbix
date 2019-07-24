@@ -33,7 +33,7 @@ alarm 25;
 
 # data
 my $key = "proxy.get";
-my $cmd = "/usr/bin/sudo /usr/bin/php /var/www/merlin/2014-2015/local/ceu/test_proxy.php";
+my $cmd = "/usr/bin/sudo /usr/bin/php /var/www/merlin/2017-2018/local/ceu/test_proxy.php";
 my $output = qx($cmd);
 #print $output;
 
