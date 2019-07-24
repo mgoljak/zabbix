@@ -25,6 +25,8 @@ class zabbix::web (
   $maintenance_ip     = [ '127.0.0.1' ],
   $manage_apache      = true,
   $manage_php         = false,
+  $max_execution_time = '300',
+  $memory_limit       = '128M',
 ) inherits zabbix::params {
 
   # depends on puppetlabs/apache

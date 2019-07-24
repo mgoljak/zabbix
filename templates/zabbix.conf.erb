@@ -9,8 +9,8 @@
 #    Order allow,deny
 #    Allow from all
 
-    php_value max_execution_time 300
-    php_value memory_limit 128M
+    php_value max_execution_time <%= @max_execution_time %>
+    php_value memory_limit <%= @memory_limit %>
     php_value post_max_size 16M
     php_value upload_max_filesize 2M
     php_value max_input_time 300
