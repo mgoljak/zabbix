@@ -9,16 +9,11 @@ class zabbix::agent::mysql::slave (
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
-  package { 'zabbix-agent_mysql-slave':
-    ensure   => present,
-  }
-
   file { "${dir_zabbix_agentd_confd}/mysql-slave.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     content => template('zabbix/agent/mysql-slave.conf.erb'),
-    require => Package['zabbix-agent_mysql-slave'],
     notify  => Service['zabbix-agent'],
   }
 
