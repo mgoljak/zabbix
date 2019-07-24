@@ -1,3 +1,2 @@
-# nfs
-UserParameter=nfs.mounted,/usr/bin/stat -f /var/www | /bin/grep -cio 'Type: nfs'
-UserParameter=nfs.available,(/usr/bin/test -f /var/www/NE_BRISI_ME.txt && /bin/echo 1) || /bin/echo 0
+# Managed by Puppet 
+UserParameter=nfs.mounted,/usr/bin/stat -f <%= @dir_for_monitoring %> | /bin/grep -cio 'Type: nfs'
