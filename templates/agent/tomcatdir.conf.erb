@@ -1,0 +1,2 @@
+UserParameter=tomcat.dirlist,java -jar <%= @dir_zabbix_agent_libdir %>/tomcat-dir.jar -lld
+UserParameter=tomcat.dir[*],java -jar <%= @dir_zabbix_agent_libdir %>/tomcat-dir.jar -dir $1
