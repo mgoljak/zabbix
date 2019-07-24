@@ -1,0 +1,69 @@
+#!/usr/bin/python3
+###################################################################
+# Sensor for gathering GPU performance data and sending to Zabbix #
+###################################################################
+
+#subprocess - python module for executing shell commands from python
+
+from subprocess import check_output, call, Popen, PIPE, STDOUT
+
+#file paths
+ZABBIX_SENDER = "/usr/bin/zabbix_sender"
+ZABBIX_CONFD = "/etc/zabbix/zabbix_agentd.conf"
+
+#initializing arrays for data
+NUM_GPUS = 0
+gpu_power = []
+gpu_curr_temp = []
+gpu_utilization = []
+gpu_memfree = []
+gpu_memused = []
+gpu_memtotal = []
+
+prev_item=''
+prev2_item=''
+prev3_item=''
+
+SMI_OUTPUT = check_output(["nvidia-smi", "-q"]).decode('utf8').split("\n")
+
+for item in SMI_OUTPUT:
+        if 'Attached GPUs' in item:
+                NUM_GPUS = int(item[-1])
+        if 'Power Draw' in item:
+                pos = item.index(':') + 2
+                gpu_power.append(item[pos:-2])
+        if 'Current Temp' in item:
+                pos = item.index(':') + 2
+                gpu_curr_temp.append(item[pos:-2])
+        if 'Gpu' in item:
+                pos = item.index(':') + 2
+                gpu_utilization.append(item[pos:-2])
+        if 'FB Memory Usage' in prev_item:
+                pos = item.index(':') + 2
+                gpu_memtotal.append(item[pos:-4])
+        if 'FB Memory Usage' in prev2_item:
+                pos = item.index(':') + 2
+                gpu_memused.append(item[pos:-4])
+        if 'FB Memory Usage' in prev3_item:
+                pos = item.index(':') + 2
+                gpu_memfree.append(item[pos:-4])
+        prev3_item = prev2_item
+        prev2_item = prev_item
+        prev_item = item
+
+# build string, formatted:
+# hostname variable value\n
+s = ''
+for i in range(NUM_GPUS):
+        s += '- ' + 'gpu.power[' + str(i) + '] ' + str(gpu_power[i]) + '\n'
+        s += '- ' + 'gpu.temp[' + str(i) + '] ' + str(gpu_curr_temp[i]) + '\n'
+        s += '- ' + 'gpu.utilization[' + str(i) + '] ' + str(gpu_utilization[i]) + '\n'
+        s += '- ' + 'gpu.memfree[' + str(i) + '] ' + str(gpu_memfree[i]) + '\n'
+        s += '- ' + 'gpu.memused[' + str(i) + '] ' + str(gpu_memused[i]) + '\n'
+        s += '- ' + 'gpu.memtotal[' + str(i) + '] ' + str(gpu_memtotal[i]) + '\n'
+s = s[:-1]
+
+p = Popen([ZABBIX_SENDER, "-c", ZABBIX_CONFD, "-i", "-"], stdout=PIPE, stdin=PIPE, stderr = STDOUT)
+p.communicate(input=bytes(s,'utf8'))
+
+print(0)
