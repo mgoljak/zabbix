@@ -12,6 +12,7 @@ class zabbix::server::java (
   $file_group              = $::zabbix::params::java_gateway_file_group,
   $file_mode               = $::zabbix::params::java_gateway_file_mode,
   $file_zabbix_javagw_conf = $::zabbix::params::file_zabbix_javagw_conf,
+  $pid_file                = $::zabbix::params::pid_file_zabbix_javagw,
 ) inherits zabbix::params {
 
   File {

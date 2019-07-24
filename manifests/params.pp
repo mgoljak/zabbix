@@ -33,6 +33,7 @@ class zabbix::params {
   $java_gateway_file_owner     = 'root'
   $java_gateway_file_group     = 'root'
   $java_gateway_file_mode      = '0644'
+  $pid_file_zabbix_javagw      = '/var/run/zabbix/zabbix_java_gateway.pid'
 
   # module dependencies
   $dependency_class = 'zabbix::dependency'
