@@ -14,18 +14,17 @@ class zabbix::agent::glpi (
   $zabbix_password         = 'api',
 ) inherits zabbix::agent {
 
-  file { "${dir_zabbix_agentd_confd}/glpi.conf" :
+  file { '/etc/cron.hourly/glpi-to-zabbix' :
     ensure  => file,
     owner   => root,
     group   => root,
-    mode    => '0644',
-    content => template('zabbix/agent/glpi.conf.erb'),
+    mode    => '0750',
+    content => template('zabbix/agent/glpi-to-zabbix.erb'),
     require => [
       Package['zabbix-agent'],
       File["${dir_zabbix_agent_libdir}/glpi_to_zabbix_api.py"],
       Package['pyzabbix'],
     ],
-    notify  => Service['zabbix-agent'],
   }
 
   file { "${dir_zabbix_agent_libdir}/glpi_to_zabbix_api.py" :

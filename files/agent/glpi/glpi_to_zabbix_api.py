@@ -310,7 +310,7 @@ result_string = result.getvalue()
 
 # Executing external zabbix_sender binary...
 try:
-    p = subprocess.Popen([zabbix_sender, '-c', zabbix_confd, '-z', 'mon-dev.srce.hr', '-i', '-'], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+    p = subprocess.Popen([zabbix_sender, '-c', zabbix_confd, '-i', '-'], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     p2 = p.communicate(input=result_string)[0]
 except Exception, e2:
     syslog.syslog('zabbix_sender_ERROR: ' + str(e2))
