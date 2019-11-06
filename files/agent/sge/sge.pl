@@ -12,6 +12,9 @@ my $QSTAT = '/opt/sge/bin/lx-amd64/qstat';
 my $GREP = '/bin/grep';
 my $SED = '/bin/sed';
 my $AWK = '/bin/awk';
+my $SORT = '/usr/bin/sort';
+my $DOMAIN = ".isabella";
+
 chomp($hostname);
 
 if (!$ENV{SGE_ROOT}) { 
@@ -100,7 +103,7 @@ $inputString .= $hostname ." sge.core_total "  . $core_tot            ."\n";
 $inputString .= $hostname ." sge.core_avail " .  ($core_tot - $core_aoACDS - $core_cdsuE)          ."\n";
 $inputString .= $hostname ." sge.core_free " . $core_ava          ."\n";
 
-my $cmd = $QSTAT . " -f | " . $GREP . " -Ev \"(tecaj|vsmp-test|--|qt)\" | " . $SED . " 's/[\\/|\\@]/\\ /g' | " . $AWK . " '{print \$2,\$4,\$5,\$6,\$7,\$9}'";
+my $cmd = $QSTAT . " -f | " . $GREP . " -Ev \"(tecaj|vsmp-test|--|qt|gpu)\" | " . $SED . " 's/[\\/|\\@|\\.]/\\ /g' | " . $AWK . " '{print \$3 \"" . $DOMAIN . "\",\$6,\$7,\$8,\$9 \".\" \$10,\$12}'";
 my $core_status = qx($cmd);
 my @core_lines = split(/\n/, $core_status);
 my $core_used = 0;
@@ -119,6 +122,24 @@ foreach(@core_lines){
     $inputString .= $core_fields[0] ." sge.node_state " . $core_fields[5]           . "\n"}
     }
 
+my $cmd = $QSTAT . " -f | " . $GREP . " gpu | " . $SED . " 's/[\\/|\\@]/\\ /g' | " . $SORT . " -k2,2 | " . $SED . " 's/gpu//g' | " . $AWK . " '{print substr(\$1,2,1),\$2,\$4,\$5,\$6,\$7,\$9}'";
+my $core_status = qx($cmd);
+my @core_lines = split(/\n/, $core_status);
+my $core_used = 0;
+my $core_avail = 0;
+my $node_load = 0;
+
+foreach(@core_lines){
+  my @core_fields = split(/ +/);
+    $inputString .= $core_fields[1] ." sge.core_res["  . $core_fields[0] . "] " . $core_fields[2]            ."\n";
+    $inputString .= $core_fields[1] ." sge.core_used[" . $core_fields[0] . "] " . $core_fields[3]            ."\n";
+    $inputString .= $core_fields[1] ." sge.core_avail[" . $core_fields[0] . "] " . $core_fields[4]           ."\n";
+    $inputString .= $core_fields[1] ." sge.node_load[" . $core_fields[0] . "] " . $core_fields[5]            ."\n";
+   if($core_fields[6] eq ""){
+    $inputString .= $core_fields[1] ." sge.node_state OK" . "\n";}
+   else{
+    $inputString .= $core_fields[1] ." sge.node_state " . $core_field[6]           . "\n"}
+    }
 
 # write everything to file
 open FH, ">", $send_file or die("Can not open file $send_file!");
