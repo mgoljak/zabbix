@@ -34,7 +34,7 @@ eval set -- "$ARGS"
 while true ; do
     case "$1" in
         -s|--sds)    sds=`find /dev -maxdepth 1 -type b -iname sd*  | awk '{print $NF}' | sed 's/[0-9]//g' | sort | uniq`; shift ;;
-        -x|--xvds)   xvs=`find /dev -maxdepth 1 -type b -iname xvd* | awk '{print $NF}' | sed 's/[0-9]//g' | sort | uniq`; shift ;;
+        -x|--xvds)   xvs=`find /dev -maxdepth 1 -type b -iname vd* -o -iname xvd* | awk '{print $NF}' | sed 's/[0-9]//g' | sort | uniq`; shift ;;
         -d|--dms)    dms=`find /dev -maxdepth 1 -type b -iname dm-* | awk '{print $NF}' | sort | uniq`; shift ;;
         -m|--mdraid) mds=`find /dev -maxdepth 1 -type b -iname md*  | awk '{print $NF}' | sort | uniq`; shift ;;
         --skip-mpath) SKIP_MPATH="true"; shift ;;
