@@ -13,7 +13,14 @@ class zabbix::agent::ssh (
       $lsof_bin = '/usr/sbin/lsof'
     }
     /(RedHat|redhat|amazon)/: {
-      $lsof_bin = '/usr/sbin/lsof'
+      case $::operatingsystemrelease {
+        default: {
+          $lsof_bin = '/usr/sbin/lsof'
+        }
+        /^8.*/: {
+          $lsof_bin = '/usr/bin/lsof'
+        }
+      }
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
       $lsof_bin = '/usr/bin/lsof'
