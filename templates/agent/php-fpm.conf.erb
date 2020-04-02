@@ -1,0 +1,8 @@
+# php-fpm
+UserParameter=php-fpm.ping,/usr/bin/sudo <%= @dir_zabbix_agent_libdir %>/php-fpm.sh ping
+UserParameter=php-fpm.active_processes,/usr/bin/sudo <%= @dir_zabbix_agent_libdir %>/php-fpm.sh active_processes
+UserParameter=php-fpm.accepted_conn,/usr/bin/sudo <%= @dir_zabbix_agent_libdir %>/php-fpm.sh accepted_conn
+UserParameter=php-fpm.idle_processes,/usr/bin/sudo <%= @dir_zabbix_agent_libdir %>/php-fpm.sh idle_processes
+UserParameter=php-fpm.latency,/usr/bin/sudo <%= @dir_zabbix_agent_libdir %>/php-fpm.sh latency
+UserParameter=php-fpm.listen_queue_len,/usr/bin/sudo <%= @dir_zabbix_agent_libdir %>/php-fpm.sh listen_queue_len
+UserParameter=php-fpm.max_children_reached,/usr/bin/sudo <%= @dir_zabbix_agent_libdir %>/php-fpm.sh max_children_reached
