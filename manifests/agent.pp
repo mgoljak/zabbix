@@ -4,32 +4,33 @@
 # This module manages zabbix-agent
 #
 class zabbix::agent (
-  $package                 = $::zabbix::params::agent_package,
-  $version                 = $::zabbix::params::agent_version,
-  $service                 = $::zabbix::params::agent_service,
-  $status                  = $::zabbix::params::agent_status,
-  $file_owner              = $::zabbix::params::agent_file_owner,
-  $file_group              = $::zabbix::params::agent_file_group,
-  $file_mode               = $::zabbix::params::agent_file_mode,
-  $purge_conf_dir          = $::zabbix::params::agent_purge_conf_dir,
-  $file_zabbix_agentd_conf = $::zabbix::params::file_zabbix_agentd_conf,
-  $erb_zabbix_agentd_conf  = 'zabbix/zabbix_agentd.conf.erb',
-  $dir_zabbix_agentd_confd = $::zabbix::params::dir_zabbix_agentd_confd,
-  $dir_zabbix_agent_libdir = $::zabbix::params::dir_zabbix_agent_libdir,
-  $zabbix_agentd_logfile   = $::zabbix::params::zabbix_agentd_logfile,
-  $zabbix_agent_pidfile    = $::zabbix::params::zabbix_agent_pidfile,
-  $server_name             = 'mon',
-  $server_active           = 'mon',
-  $buffersend              = 5,
-  $buffersize              = 100,
-  $client_name             = $::fqdn,
-  $timeout                 = '30',
-  $tls_connect             = 'unencrypted',
-  $tls_accept              = 'unencrypted',
-  $tls_ca_file             = undef,
-  $tls_cert_file           = undef,
-  $tls_key_file            = undef,
-  $autoload_configs        = false,
+  $package                  = $::zabbix::params::agent_package,
+  $version                  = $::zabbix::params::agent_version,
+  $service                  = $::zabbix::params::agent_service,
+  $status                   = $::zabbix::params::agent_status,
+  $file_owner               = $::zabbix::params::agent_file_owner,
+  $file_group               = $::zabbix::params::agent_file_group,
+  $file_mode                = $::zabbix::params::agent_file_mode,
+  $purge_conf_dir           = $::zabbix::params::agent_purge_conf_dir,
+  $file_zabbix_agentd_conf  = $::zabbix::params::file_zabbix_agentd_conf,
+  $erb_zabbix_agentd_conf   = 'zabbix/zabbix_agentd.conf.erb',
+  $dir_zabbix_agentd_confd  = $::zabbix::params::dir_zabbix_agentd_confd,
+  $dir_zabbix_agent_libdir  = $::zabbix::params::dir_zabbix_agent_libdir,
+  $dir_zabbix_agent_modules = $::zabbix::params::dir_zabbix_agent_modules,
+  $zabbix_agentd_logfile    = $::zabbix::params::zabbix_agentd_logfile,
+  $zabbix_agent_pidfile     = $::zabbix::params::zabbix_agent_pidfile,
+  $server_name              = 'mon',
+  $server_active            = 'mon',
+  $buffersend               = 5,
+  $buffersize               = 100,
+  $client_name              = $::fqdn,
+  $timeout                  = '30',
+  $tls_connect              = 'unencrypted',
+  $tls_accept               = 'unencrypted',
+  $tls_ca_file              = undef,
+  $tls_cert_file            = undef,
+  $tls_key_file             = undef,
+  $autoload_configs         = false,
 ) inherits zabbix::params {
 
   File {
@@ -68,6 +69,12 @@ class zabbix::agent (
   file { 'zabbix_agent_libdir':
     ensure => directory,
     path   => $dir_zabbix_agent_libdir,
+  }
+
+  file { 'zabbix_agent_modules':
+    ensure  => directory,
+    path    => $dir_zabbix_agent_modules,
+    require => File['zabbix_agent_libdir'],
   }
 
   # enable zabbix plugins to run sudo
