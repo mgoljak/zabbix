@@ -147,8 +147,9 @@ for item in glpi_hosts_zabbix:
         zabbix_hostgroup_names = set()
         for j in zabbix_hostgroup_with_host:
             zabbix_hostgroup_names.add(j['name'])
-        if not glpi_hostgroup.issubset(zabbix_hostgroup_names):
-            update = list(glpi_hostgroup.union(zabbix_hostgroup_names))
+
+        update = list(glpi_hostgroup.union(zabbix_hostgroup_names))
+        if update != zabbix_hostgroup_names:
             zabbix_hostgroup_update = list()
             for i in update:
                 if i in computertypes_list and i not in glpi_hostgroup or \
