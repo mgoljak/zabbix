@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import xmlrpclib
 from pyzabbix import ZabbixAPI
+import re
 import sys
 import argparse
 import subprocess
@@ -43,6 +44,9 @@ session = result['session']
 glpi_users = server.glpi.listUsers({'session': session, 'limit': 10000})    # all the users in glpi
 glpi_groups = server.glpi.listGroups({'session': session, 'limit': 10000})  # all the groups in glpi
 glpi_hosts = server.glpi.listObjects({'session': session, 'limit': 10000, 'itemtype': 'Computer'})  # all the computers
+glpi_computertypes = server.glpi.listDropdownValues({'session': session, 'dropdown': 'ComputerType'})
+
+computertypes_list = [t['name'] for t in glpi_computertypes]
 
 # All the groups with associated users
 glpi_groups_with_users = dict()
@@ -125,6 +129,7 @@ for item in glpi_hostgroups_unique:
 zabbix_hostgroup = zapi.hostgroup.get()
 
 # Connecting hosts to hostgroups...
+glpi_group_pattern = re.compile('\d{3}-\d{2}-\d{3}')
 for item in glpi_hosts_zabbix:
     zabbix_host_id = [d.get('hostid') for d in zabbix_host if d.get('name') == item['name']]
     zabbix_host_id = zabbix_host_id[0]
@@ -146,9 +151,13 @@ for item in glpi_hosts_zabbix:
             update = list(glpi_hostgroup.union(zabbix_hostgroup_names))
             zabbix_hostgroup_update = list()
             for i in update:
-                x2 = [d.get('groupid') for d in zabbix_hostgroup if d.get('name') == i]
-                if x2:
-                    zabbix_hostgroup_update.append(x2[0])
+                if i in computertypes_list and i not in glpi_hostgroup or \
+                        re.match(glpi_group_pattern, i) and i not in glpi_hostgroup:
+                    pass
+                else:
+                    x2 = [d.get('groupid') for d in zabbix_hostgroup if d.get('name') == i]
+                    if x2:
+                        zabbix_hostgroup_update.append(x2[0])
             zapi.host.update(hostid=zabbix_host_id, groups=zabbix_hostgroup_update)
 
 # If hostgroups are empty, remove them:
