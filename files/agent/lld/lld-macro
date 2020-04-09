@@ -1,0 +1,32 @@
+#!/bin/sh
+
+if [ $# -ne 2 ]
+then
+  echo "Please provide macron name & comma separated list of macro values"
+  exit -1
+fi
+
+MACRO_NAMES=$1
+MACRO_VALUES_IN=$2
+
+OUTPUT="{\"data\":["
+
+OIFS=$IFS
+IFS=':'
+MACRO_NAMES_ARRAY=($MACRO_NAMES)
+IFS=','
+for MACRO_VALUES in $MACRO_VALUES_IN
+do
+    IFS=':'
+    MACRO_VALUES_ARRAY=($MACRO_VALUES)
+    OUTPUT="$OUTPUT{"
+    for INDEX in ${!MACRO_NAMES_ARRAY[*]}
+    do
+      OUTPUT="$OUTPUT\"{#${MACRO_NAMES_ARRAY[$INDEX]}}\":\"${MACRO_VALUES_ARRAY[$INDEX]}\","
+    done
+    OUTPUT="${OUTPUT%,}},"
+done
+IFS=$OIFS
+
+OUTPUT="${OUTPUT%,}]}"
+echo $OUTPUT

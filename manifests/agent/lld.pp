@@ -34,4 +34,12 @@ class zabbix::agent::lld (
     require => ::Sudoers::Allowed_command['zabbix_sudo_multipath'],
   }
 
+  file { "${dir_zabbix_agent_libdir}/lld-macro" :
+    ensure => file,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
+    source => 'puppet:///modules/zabbix/agent/lld/lld-macro',
+    notify => Service['zabbix-agent'],
+  }
 }
