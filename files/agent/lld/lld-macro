@@ -2,8 +2,8 @@
 
 if [ $# -ne 2 ]
 then
-  echo "Please provide macron name & comma separated list of macro values"
-  exit -1
+  echo "{\"data\":[]}"
+  exit
 fi
 
 MACRO_NAMES=$1
