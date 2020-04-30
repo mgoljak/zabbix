@@ -109,19 +109,21 @@ if "resources" in dict_state:
     else:
         dict_state["state"] = "OK: puppetrun successful, no changes"
 
+report_file_segments = ["environment","status"]
+
 for run_report_file in possible_run_report:
     if os.path.exists(run_report_file):
-        try:
-            with open(run_report_file) as report_data:
-                for line in report_data:
-                    m = re.match("^environment: (.+)$", line)
-                    if m:
-                        dict_state["environment"] = m.group(1)
-                        break
-        except Exception as e:
-            dict_state["environment"] = "unknown"
-            pass
-        break
+        for i in report_file_segments:
+            try:
+                with open(run_report_file) as report_data:
+                    for line in report_data:
+                        m = re.match("^%s: (.+)$" % i, line)
+                        if m:
+                            dict_state[i] = m.group(1)
+                            break
+            except Exception as e:
+                dict_state[i] = "unknown"
+                pass
 
 if len(sys.argv) == 2:
     print(dict_state[sys.argv[1]])
