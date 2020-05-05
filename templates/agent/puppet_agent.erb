@@ -109,7 +109,7 @@ if "resources" in dict_state:
     else:
         dict_state["state"] = "OK: puppetrun successful, no changes"
 
-report_file_segments = ["environment","status"]
+report_file_segments = ["environment","cached_catalog_status"]
 
 for run_report_file in possible_run_report:
     if os.path.exists(run_report_file):
