@@ -1,0 +1,2 @@
+# OSSEC/Wazuh
+UserParameter=ossec.agents[*],sudo /var/ossec/bin/agent_control -l | grep -i "$1" | wc -l
