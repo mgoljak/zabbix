@@ -13,35 +13,44 @@ class zabbix::agent::phpfpm (
     default: {
       $cgi_fcgi = 'fcgi'
       if $php_fpm_sock == undef {
-        $php_fpm_sock = '127.0.0.1:9000'
+        $_php_fpm_sock = '127.0.0.1:9000'
+      }
+      else {
+        $_php_fpm_sock = $php_fpm_sock
       }
     }
     /(RedHat|redhat|amazon)/: {
       $cgi_fcgi = 'fcgi'
       if $php_fpm_sock == undef {
         if $::facts['os']['release']['major'] == '8' {
-          $php_fpm_sock = '/run/php-fpm/www.sock'
+          $_php_fpm_sock = '/run/php-fpm/www.sock'
         }
         else {
-          $php_fpm_sock = '127.0.0.1:9000'
+          $_php_fpm_sock = '127.0.0.1:9000'
         }
+      }
+      else {
+        $_php_fpm_sock = $php_fpm_sock
       }
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
-      $cgi_fcgi = 'libcgi-bin'
+      $cgi_fcgi = 'libfcgi-bin'
       if $php_fpm_sock == undef {
         if $::facts['os']['release']['major'] == '10' {
-          $php_fpm_sock = '/run/php/php7.3-fpm.sock'
+          $_php_fpm_sock = '/run/php/php7.3-fpm.sock'
         }
         else {
-          $php_fpm_sock = '/run/php/php7.0-fpm.sock'
+          $_php_fpm_sock = '/run/php/php7.0-fpm.sock'
         }
+      }
+      else {
+        $_php_fpm_sock = $php_fpm_sock
       }
     }
   }
 
-  package { 'cgi-fcgi' :
-    ensure =>  present,
+  package { 'cgi-fcgi':
+    ensure => present,
     name   => $cgi_fcgi,
   }
 
@@ -61,7 +70,7 @@ class zabbix::agent::phpfpm (
     require => [
       Package['zabbix-agent'],
       File["${dir_zabbix_agent_libdir}/php-fpm.sh"],
-      Package['fcgi'],
+      Package['cgi-fcgi'],
     ],
     notify  => Service['zabbix-agent'],
   }
