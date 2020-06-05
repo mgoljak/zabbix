@@ -16,6 +16,7 @@ Mandatory arguments to long options are mandatory for short options too.
   -x, --xvds                 list virtual devices (eg. xvda)
   -d, --dms                  list mapped devices (eg. dm-5)
   -m, --mdraid               list mdraid devices (eg. md3)
+  -n, --nvmes                list nvme devices (eg. nvme0n1)
   --skip-mpath               skip devices used by multipath
   -h, --help                 display this help and exit
 
@@ -27,16 +28,17 @@ exit 1
 DISK_IN_MPATH=1
 
 # read the options
-ARGS=$( getopt -o sxdmh --long sds,xvds,dms,mdraid,help,skip-mpath -n 'lld-blockdevices' -- "$@" );
+ARGS=$( getopt -o sxdmhn --long sds,xvds,dms,mdraid,nvmes,help,skip-mpath -n 'lld-blockdevices' -- "$@" );
 eval set -- "$ARGS"
 
 # extract options and their arguments into variables.
 while true ; do
     case "$1" in
-        -s|--sds)    sds=`find /dev -maxdepth 1 -type b -iname sd*  | awk '{print $NF}' | sed 's/[0-9]//g' | sort | uniq`; shift ;;
-        -x|--xvds)   xvs=`find /dev -maxdepth 1 -type b -iname vd* -o -iname xvd* | awk '{print $NF}' | sed 's/[0-9]//g' | sort | uniq`; shift ;;
-        -d|--dms)    dms=`find /dev -maxdepth 1 -type b -iname dm-* | awk '{print $NF}' | sort | uniq`; shift ;;
-        -m|--mdraid) mds=`find /dev -maxdepth 1 -type b -iname md*  | awk '{print $NF}' | sort | uniq`; shift ;;
+        -s|--sds)      sds=`find /dev -maxdepth 1 -type b -iname sd*   | awk '{print $NF}' | sed 's/[0-9]//g' | sort | uniq`; shift ;;
+        -x|--xvds)     xvs=`find /dev -maxdepth 1 -type b -iname vd* -o -iname xvd* | awk '{print $NF}' | sed 's/[0-9]//g' | sort | uniq`; shift ;;
+        -d|--dms)      dms=`find /dev -maxdepth 1 -type b -iname dm-*  | awk '{print $NF}' | sort | uniq`; shift ;;
+        -m|--mdraid)   mds=`find /dev -maxdepth 1 -type b -iname md*   | awk '{print $NF}' | sort | uniq`; shift ;;
+        -n|--nvmes)  nvmes=`find /dev -maxdepth 1 -type b -iname nvme* | awk '{print $NF}' | sort | uniq`; shift ;;
         --skip-mpath) SKIP_MPATH="true"; shift ;;
         --) shift ; break ;;
         *) usagehelp ; exit 1 ;;
@@ -46,7 +48,7 @@ done
 echo "{"
 echo "\"data\":["
 
-for blockdev in $sds $xvs $mds $dms; do
+for blockdev in $sds $xvs $mds $dms $nvmes; do
     if [ ! -z $LAST_DEV ]; then
         [ "xx$SKIP_MPATH" == "xxtrue" -a -x $MULTIPATH ] && sudo $MULTIPATH -ll 2>/dev/null | grep -q "${LAST_DEV:5} "
         DISK_IN_MPATH=$?
