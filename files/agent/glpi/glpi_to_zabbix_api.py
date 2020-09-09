@@ -165,6 +165,8 @@ for item in glpi_hosts_zabbix:
 zabbix_hostgroup_containing_hosts = zapi.hostgroup.get(real_hosts=1)
 # Group 'Templates' is also in hostgroups
 zabbix_hostgroup_containing_hosts.append([d for d in zabbix_hostgroup if d.get('name') == 'Templates'][0])
+zabbix_hostgroup_containing_hosts.append([d for d in zabbix_hostgroup if d.get('name') == 'Hypervisors'][0])
+zabbix_hostgroup_containing_hosts.append([d for d in zabbix_hostgroup if d.get('name') == 'Virtual machines'][0])
 zabbix_hostgroup_not_containing_hosts = [d for d in zabbix_hostgroup if d not in zabbix_hostgroup_containing_hosts]
 if zabbix_hostgroup_not_containing_hosts:
     for item in zabbix_hostgroup_not_containing_hosts:
