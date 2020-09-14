@@ -27,6 +27,7 @@ class zabbix::web (
   $manage_php         = false,
   $max_execution_time = '300',
   $memory_limit       = '128M',
+  $package_name       = '',
 ) inherits zabbix::params {
 
   # depends on puppetlabs/apache
@@ -39,6 +40,12 @@ class zabbix::web (
   # depends on jsosic/php module
   if ( $manage_php ) { ::php::mod { 'pgsql': ensure => present } }
 
+  if ( $package_name == '' ) {
+    $full_package_name = "${package}-${db}"
+  } else {
+    $full_package_name = $package_name
+  }
+
   File {
     ensure  => file,
     require => Package['zabbix-web'],
@@ -46,7 +53,7 @@ class zabbix::web (
 
   package { 'zabbix-web':
     ensure => $version,
-    name   => "${package}-${db}",
+    name   => $full_package_name,
   }
 
   file { "${dir_zabbix_php}/zabbix.conf.php":
