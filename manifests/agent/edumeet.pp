@@ -19,7 +19,7 @@ class zabbix::agent::edumeet (
     ensure => file,
     owner  => root,
     group  => root,
-    source => 'puppet:///modules/zabbix/agent/edumeet/edumeet.conf', 
+    source => 'puppet:///modules/zabbix/agent/edumeet/edumeet.conf',
   }
 
 }
