@@ -16,14 +16,10 @@ class zabbix::agent::edumeet (
   }
 
   file { "${dir_zabbix_agentd_confd}/edumeet.conf":
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    source  => 'puppet:///modules/zabbix/agent/edumeet/edumeet.conf',
-  }
-
-  package { 'nodejs':
-    ensure => present,
+    ensure => file,
+    owner  => root,
+    group  => root,
+    source => 'puppet:///modules/zabbix/agent/edumeet/edumeet.conf', 
   }
 
 }
